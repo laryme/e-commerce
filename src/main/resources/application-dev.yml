@@ -1,0 +1,48 @@
+app:
+  jwt:
+    token:
+      key:
+        access: 4125442A462D4A614E645267556B58703273357638792F423F4528482B4B6250
+        refresh: 2D4B6150645367566B597033733676397924423F4528482B4D6251655468576D
+        verify: 7336763979244226452948404D635166546A576E5A7234743777217A25432A46
+      expiration:
+        access: 86400000
+        refresh: 604800000
+        verify: 1800000
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: 2002
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lochinbek433@gmail.com
+    password: ixzsnjwpyffafpdv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+product:
+  images:
+    path: /home/lary/resourses/ecommerce/images/product
+aws:
+  access:
+    key:
+      id: AKIASTA6V5ZP36G6E74C
+      secret: 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
+  s3:
+    region:
+      name: eu-central-1
+    bucket:
+      name: problem-solver
+    endpointUrl: .s3.eu-central-1.amazonaws.com/problem-solver/projects/problem-solver/images/avatar/
