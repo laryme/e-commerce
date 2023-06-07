@@ -6,10 +6,8 @@ import uz.spiders.ecommerce.entity.template.BaseEntity;
 
 @Entity
 public class Address extends BaseEntity {
-    @Column(nullable = false)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Region region;
-    @Column(nullable = false)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Province province;
     @Column(nullable = false)

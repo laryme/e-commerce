@@ -11,7 +11,7 @@ app:
         verify: 1800000
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://localhost:5432/olchauz
     username: postgres
     password: 2002
   jpa:
@@ -34,7 +34,7 @@ spring:
             enable: true
 product:
   images:
-    path: /home/lary/resourses/ecommerce/images/product
+    path: /home/lary/resources/ecommerce/images/product
 aws:
   access:
     key:

@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 @Builder
 public class User extends BaseEntity implements UserDetails {
 
-    @Column(nullable = false, unique = true)
+    /*@Column(nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer userId;*/
 
     @Column(nullable = true, columnDefinition = "VARCHAR(50) DEFAULT 'user-not-defined'")
-    private String fullName = "user-"+userId;
+    private String fullName = "user-"+"userId";
 
     @Column(nullable = false, unique = true)
     private String email;
