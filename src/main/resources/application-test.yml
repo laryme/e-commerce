@@ -1,0 +1,48 @@
+app:
+  jwt:
+    token:
+      key:
+        access: access_token
+        refresh: refresh_token
+        verify: verify_token
+      expiration:
+        access: 86400000
+        refresh: 604800000
+        verify: 1800000
+spring:
+  datasource:
+    url: database_url
+    username: database_user
+    password: database_password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gmail_address
+    password: gmail_api_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+product:
+  images:
+    path: path_to_images
+aws:
+  access:
+    key:
+      id: aws_id
+      secret: aws_secret_key
+  s3:
+    region:
+      name: region
+    bucket:
+      name: bucket_name
+    endpointUrl: endpoint
