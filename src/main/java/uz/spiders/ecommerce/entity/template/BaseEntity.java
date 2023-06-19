@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -28,4 +27,6 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(nullable = false)
     private Timestamp updatedAt;
+
+    private boolean deleted;
 }

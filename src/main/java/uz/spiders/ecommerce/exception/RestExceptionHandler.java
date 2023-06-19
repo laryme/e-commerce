@@ -109,4 +109,15 @@ public class RestExceptionHandler {
                 HttpStatus.NOT_FOUND);
 
     }
+
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<ApiResult<?>> exceptionHandler(InvalidParameterException ex) {
+        return new ResponseEntity<>(
+                ApiResult
+                        .failResponse(
+                                ex.getMessage(),
+                                HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.BAD_REQUEST);
+
+    }
 }

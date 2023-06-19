@@ -16,7 +16,4 @@ import uz.spiders.ecommerce.entity.template.BaseEntity;
 public class ProductPicture extends BaseEntity {
     private String fileName;
     private String fileUrl;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
 }

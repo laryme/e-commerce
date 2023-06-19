@@ -31,7 +31,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String header = request.getHeader(Constants.AUTH_HEADER);
         final String jwt;
         final String username;
-        System.out.println(header);
 
         if(header == null || !header.startsWith(Constants.AUTH_TYPE_BEARER)){
             filterChain.doFilter(request, response);
