@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import uz.spiders.ecommerce.mapper.ProductMapper;
+import uz.spiders.ecommerce.mapper.ProductMapperImpl;
 import uz.spiders.ecommerce.repository.UserRepository;
 
 @Configuration
@@ -42,6 +44,11 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ProductMapper productMapper(){
+        return new ProductMapperImpl();
     }
 
 }

@@ -16,8 +16,6 @@ import uz.spiders.ecommerce.repository.RoleRepository;
 import uz.spiders.ecommerce.repository.UserRepository;
 import uz.spiders.ecommerce.service.interfaces.UserService;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -38,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> getUserById(UUID id) {
+    public ApiResult<?> getUserById(Integer id) {
         return ApiResult
                 .successResponse(
                         userRepository.findById(id)
@@ -46,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> editUser(UUID id, UserDTO userDTO) {
+    public ApiResult<?> editUser(Integer id, UserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -56,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> changeDeletedFieldStatus(UUID id) {
+    public ApiResult<?> changeDeletedFieldStatus(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -76,14 +74,14 @@ public class UserServiceImpl implements UserService {
 
     //for delete
     @Override
-    public ApiResult<?> deleteUserById(UUID id) {
+    public ApiResult<?> deleteUserById(Integer id) {
         userRepository.deleteById(id);
         return ApiResult
                 .successResponse("User successfully deleted");
     }
 
     @Override
-    public ApiResult<?> changeBlockStatus(UUID id) {
+    public ApiResult<?> changeBlockStatus(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -101,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> promoteUserToNewRole(UUID id, Integer roleId) {
+    public ApiResult<?> promoteUserToNewRole(Integer id, Integer roleId) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new DataNotFoundException("Role not found with given id"));
 
@@ -117,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ApiResult<?> changeUserAvatar(UUID id, MultipartFile file) {
+    public ApiResult<?> changeUserAvatar(Integer id, MultipartFile file) {
         /*User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 

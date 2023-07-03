@@ -13,7 +13,6 @@ import uz.spiders.ecommerce.repository.DetailKeyRepository;
 import uz.spiders.ecommerce.repository.ProductDetailRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,16 +40,8 @@ public class ProductDetailService {
     }
 
     private DetailKey toDetailKey(DetailKeyDTO detailKeyDTO){
-        Optional<DetailCategory> detailCategory = detailCategoryRepository.findById(detailKeyDTO.detailCategoryId());
-        if(detailCategory.isEmpty())
-            throw new DataNotFoundException("detailCategory not found");
-
-        DetailKey detailKey = DetailKey.builder()
-                .name(detailKeyDTO.name())
-                .isHeader(detailKeyDTO.isHeader())
-                .detailCategory(detailCategory.get())
-                .build();
-
-        return detailKeyRepository.save(detailKey);
+        DetailCategory detailCategory = detailCategoryRepository.findById(detailKeyDTO.detailCategoryId()).orElseThrow(() -> new DataNotFoundException("detailCategory not found"));
+        return detailKeyRepository.findById(detailKeyDTO.detailKeyId())
+                .orElseThrow(() -> new DataNotFoundException("detailKey not found"));
     }
 }

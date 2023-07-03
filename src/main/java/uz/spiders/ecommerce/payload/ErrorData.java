@@ -9,10 +9,13 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorData {
     private String msg;
-
     private Integer code;
-
     private String fieldName;
+
+    public ErrorData(String msg, String fieldName) {
+        this.msg = msg;
+        this.fieldName = fieldName;
+    }
 
     public ErrorData(String msg, Integer code) {
         this.msg = msg;

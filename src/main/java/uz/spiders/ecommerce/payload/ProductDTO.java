@@ -1,12 +1,9 @@
 package uz.spiders.ecommerce.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
-import java.util.UUID;
 
 public record ProductDTO(
         @JsonProperty("name")
@@ -22,12 +19,14 @@ public record ProductDTO(
         String description,
 
         @JsonProperty("brandID")
-        @NotBlank(message = "product brandID is required")
-        UUID brandID,
+        @NotNull(message = "product brandID is required")
+        @Positive
+        Integer brandID,
 
         @JsonProperty("categoryID")
-        @NotBlank(message = "product categoryID is required")
-        UUID categoryID,
+        @NotNull(message = "product categoryID is required")
+        @Positive
+        Integer categoryID,
 
         @JsonProperty("productDetailDTOS")
         @Size(min = 1, message = "product details is required")

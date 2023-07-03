@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User extends BaseEntity implements UserDetails {
 
     /*@Column(nullable = false, unique = true)

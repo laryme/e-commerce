@@ -10,9 +10,7 @@ import uz.spiders.ecommerce.payload.ApiResult;
 import uz.spiders.ecommerce.payload.UserDTO;
 import uz.spiders.ecommerce.service.interfaces.UserService;
 
-
 import java.util.Objects;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,32 +30,32 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ApiResult<?> getUserById(UUID id) {
+    public ApiResult<?> getUserById(Integer id) {
         return userService.getUserById(id);
     }
 
     @Override
-    public ApiResult<?> editUser(UUID id, UserDTO userDTO) {
+    public ApiResult<?> editUser(Integer id, UserDTO userDTO) {
         return userService.editUser(id, userDTO);
     }
 
     @Override
-    public ApiResult<?> deleteUser(UUID id) {
+    public ApiResult<?> deleteUser(Integer id) {
         return userService.deleteUserById(id);
     }
 
     @Override
-    public ApiResult<?> blockUser(UUID id) {
+    public ApiResult<?> blockUser(Integer id) {
         return userService.changeBlockStatus(id);
     }
 
     @Override
-    public ApiResult<?> promoteUserToNewRole(UUID id, Integer roleId) {
+    public ApiResult<?> promoteUserToNewRole(Integer id, Integer roleId) {
         return userService.promoteUserToNewRole(id, roleId);
     }
 
     @Override
-    public ApiResult<?> changeUserAvatar(UUID id, MultipartFile file) {
+    public ApiResult<?> changeUserAvatar(Integer id, MultipartFile file) {
         return userService.changeUserAvatar(id, file);
     }
 }

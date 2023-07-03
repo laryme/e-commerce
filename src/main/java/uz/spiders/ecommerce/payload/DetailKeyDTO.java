@@ -1,14 +1,10 @@
 package uz.spiders.ecommerce.payload;
 
-import jakarta.validation.constraints.NotBlank;
-
-import java.util.UUID;
+import jakarta.validation.constraints.NotNull;
 
 public record DetailKeyDTO(
-        @NotBlank(message = "productDetailKey name is required")
-        String name,
-        @NotBlank(message = "productDetailKey isHeader is required")
-        boolean isHeader,
-        @NotBlank(message = "productDetailKey detailCategoryId is required")
-        UUID detailCategoryId
+        @NotNull(message = "productDetailKey id is required")
+        Integer detailKeyId,
+        @NotNull(message = "productDetailKey detailCategoryId is required")
+        Integer detailCategoryId
 ) {}

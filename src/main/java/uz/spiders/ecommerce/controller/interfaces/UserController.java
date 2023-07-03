@@ -7,8 +7,6 @@ import uz.spiders.ecommerce.payload.ApiResult;
 import uz.spiders.ecommerce.payload.UserDTO;
 import uz.spiders.ecommerce.utils.Constants;
 
-import java.util.UUID;
-
 @RequestMapping(UserController.BASE_PATH)
 public interface UserController {
     String BASE_PATH = Constants.BASE_PATH + "/user";
@@ -20,20 +18,20 @@ public interface UserController {
             @RequestParam(required = false, defaultValue = "id,asc") String[] sort);
 
     @GetMapping("/{id}")
-    ApiResult<?> getUserById(@PathVariable UUID id);
+    ApiResult<?> getUserById(@PathVariable Integer id);
 
     @PutMapping("/{id}")
-    ApiResult<?> editUser(@PathVariable UUID id, @RequestBody UserDTO userDTO);
+    ApiResult<?> editUser(@PathVariable Integer id, @RequestBody UserDTO userDTO);
 
     @DeleteMapping("/{id}")
-    ApiResult<?> deleteUser(@PathVariable UUID id);
+    ApiResult<?> deleteUser(@PathVariable Integer id);
 
     @GetMapping("/user-block/{id}")
-    ApiResult<?> blockUser(@PathVariable UUID id);
+    ApiResult<?> blockUser(@PathVariable Integer id);
 
     @PutMapping("/{id}/promote")
-    ApiResult<?> promoteUserToNewRole(@PathVariable UUID id, @RequestParam Integer roleId);
+    ApiResult<?> promoteUserToNewRole(@PathVariable Integer id, @RequestParam Integer roleId);
 
     @PostMapping("/{id}/upload-avatar")
-    ApiResult<?> changeUserAvatar(@PathVariable UUID id, @RequestParam("file") MultipartFile file);
+    ApiResult<?> changeUserAvatar(@PathVariable Integer id, @RequestParam("file") MultipartFile file);
 }

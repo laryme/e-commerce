@@ -28,9 +28,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+
         String header = request.getHeader(Constants.AUTH_HEADER);
         final String jwt;
-        final String username;
+        String username = null;
 
         if(header == null || !header.startsWith(Constants.AUTH_TYPE_BEARER)){
             filterChain.doFilter(request, response);
@@ -38,7 +39,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         jwt = header.substring(Constants.AUTH_TYPE_BEARER.length());
-        username = jwtService.extractUsernameFromAccessToken(jwt);
+        try {
+            username = jwtService.extractUsernameFromAccessToken(jwt);
+        } catch (Exception ignored){}
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             //todo handle user not found exception

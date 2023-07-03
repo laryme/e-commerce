@@ -5,15 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import uz.spiders.ecommerce.entity.Category;
-import uz.spiders.ecommerce.entity.Role;
-import uz.spiders.ecommerce.entity.User;
+import uz.spiders.ecommerce.entity.*;
 import uz.spiders.ecommerce.entity.enums.Permission;
 import uz.spiders.ecommerce.entity.enums.RoleType;
-import uz.spiders.ecommerce.repository.BrandRepository;
-import uz.spiders.ecommerce.repository.CategoryRepository;
-import uz.spiders.ecommerce.repository.RoleRepository;
-import uz.spiders.ecommerce.repository.UserRepository;
+import uz.spiders.ecommerce.repository.*;
 
 import java.util.Objects;
 import java.util.Set;
@@ -26,6 +21,7 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
+    private final DetailCategoryRepository detailCategoryRepository;
 
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String flag;
@@ -54,7 +50,10 @@ public class DataLoader implements CommandLineRunner {
 
             userRepository.save(superUser);
 
+            brandRepository.save(new Brand("BRAND-1"));
+            categoryRepository.save(new Category("CATEGORY-1", null));
 
+            detailCategoryRepository.save(new DetailCategory("DETAIL-CATEGORY-1"));
         }
     }
 }

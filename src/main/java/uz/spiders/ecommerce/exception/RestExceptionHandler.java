@@ -1,11 +1,14 @@
 package uz.spiders.ecommerce.exception;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +16,6 @@ import uz.spiders.ecommerce.payload.ApiResult;
 import uz.spiders.ecommerce.payload.ErrorData;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class RestExceptionHandler {
@@ -27,14 +29,24 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResult<List<ErrorData>>> exceptionHandler(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(
+        BindingResult bindingResult = ex.getBindingResult();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+
+        return ResponseEntity.status(400)
+                .body(
+                        new ApiResult<>(
+                                fieldErrors
+                                        .stream()
+                                        .map(r -> new ErrorData(r.getDefaultMessage(), r.getField()))
+                                        .toList()));
+       /* return new ResponseEntity<>(
                 ApiResult
                         .failResponse(
                                 ex.getBindingResult().getFieldErrors()
                                         .stream()
                                         .map(e -> new ErrorData(e.getDefaultMessage(), HttpStatus.BAD_REQUEST.value()))
                                         .collect(Collectors.toList())),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST);*/
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -118,6 +130,17 @@ public class RestExceptionHandler {
                                 ex.getMessage(),
                                 HttpStatus.BAD_REQUEST.value()),
                 HttpStatus.BAD_REQUEST);
+
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiResult<?>> exceptionHandler(ExpiredJwtException ex) {
+        return new ResponseEntity<>(
+                ApiResult
+                        .failResponse(
+                                ex.getMessage(),
+                                HttpStatus.BAD_REQUEST.value()),
+                HttpStatus.NOT_FOUND);
 
     }
 }
