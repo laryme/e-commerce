@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.ProductDTO;
 import uz.spiders.ecommerce.utils.Constants;
 
@@ -18,25 +18,25 @@ public interface ProductController {
 
     @PostMapping
     //@PreAuthorize("hasAuthority('PRODUCT_CREATE')")
-    ApiResult<?> createNewProduct(@Valid @RequestPart(name = "product") ProductDTO product,
-                                  @Valid @RequestPart List<MultipartFile> files);
+    ApiResponse<?> createNewProduct(@Valid @RequestPart(name = "product") ProductDTO product,
+                                    @Valid @RequestPart List<MultipartFile> files);
 
     @GetMapping("/{id}")
-    ApiResult<?> getProductById(@PathVariable Integer id);
+    ApiResponse<?> getProductById(@PathVariable Integer id);
 
     @GetMapping("/change-status/{id}")
     @PreAuthorize("hasAuthority('PROBLEM_CHANGE_STATUS')")
-    ApiResult<?> changeProductStatus(@PathVariable Integer id);
+    ApiResponse<?> changeProductStatus(@PathVariable Integer id);
 
     @GetMapping("/all")
-    ApiResult<?> getAllProduct(
+    ApiResponse<?> getAllProduct(
             @RequestParam(required = false,defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "id,asc") String[] sort);
 
     @DeleteMapping("/{id}")
     @PreAuthorize(value = "hasAuthority('PRODUCT_DELETE')")
-    ApiResult<?> deleteProduct(@PathVariable Integer id);
+    ApiResponse<?> deleteProduct(@PathVariable Integer id);
 
     @GetMapping(PRODUCT_IMAGE)
     ResponseEntity<?> getProductPicture(@PathVariable String name);

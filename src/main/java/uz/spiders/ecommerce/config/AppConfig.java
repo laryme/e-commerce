@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import uz.spiders.ecommerce.mapper.BrandMapper;
+import uz.spiders.ecommerce.mapper.BrandMapperImpl;
 import uz.spiders.ecommerce.mapper.ProductMapper;
 import uz.spiders.ecommerce.mapper.ProductMapperImpl;
 import uz.spiders.ecommerce.repository.UserRepository;
@@ -49,6 +51,11 @@ public class AppConfig {
     @Bean
     public ProductMapper productMapper(){
         return new ProductMapperImpl();
+    }
+
+    @Bean
+    public BrandMapper brandMapper(){
+        return new BrandMapperImpl();
     }
 
 }

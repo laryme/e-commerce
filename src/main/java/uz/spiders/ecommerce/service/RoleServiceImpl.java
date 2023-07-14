@@ -7,7 +7,7 @@ import uz.spiders.ecommerce.entity.Role;
 import uz.spiders.ecommerce.entity.enums.Permission;
 import uz.spiders.ecommerce.entity.enums.RoleType;
 import uz.spiders.ecommerce.exception.DataNotFoundException;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.RoleDTO;
 import uz.spiders.ecommerce.repository.RoleRepository;
 import uz.spiders.ecommerce.service.interfaces.RoleService;
@@ -25,34 +25,34 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public ApiResult<List<Role>> getAllRoles() {
-        return ApiResult
+    public ApiResponse<List<Role>> getAllRoles() {
+        return ApiResponse
                 .successResponse(roleRepository.findAll());
     }
 
     @Override
-    public ApiResult<Role> getRoleById(Integer id) {
-        return ApiResult
+    public ApiResponse<Role> getRoleById(Integer id) {
+        return ApiResponse
                 .successResponse(roleRepository.findById(id)
                         .orElseThrow(() -> new DataNotFoundException("Role not found with given id")));
     }
 
     @Override
-    public ApiResult<?> createNewRole(RoleDTO roleDTO) {
+    public ApiResponse<?> createNewRole(RoleDTO roleDTO) {
         roleRepository.save(roleMapper(roleDTO));
-        return ApiResult.successResponse("Role successfully created");
+        return ApiResponse.successResponse("Role successfully created");
     }
 
     @Override
-    public ApiResult<?> deleteRoleById(Integer id) {
+    public ApiResponse<?> deleteRoleById(Integer id) {
         roleRepository.deleteById(id);
 
-        return ApiResult
+        return ApiResponse
                 .successResponse("Role successfully deleted");
     }
 
     @Override
-    public ApiResult<?> updateRole(Integer id, RoleDTO roleDTO) {
+    public ApiResponse<?> updateRole(Integer id, RoleDTO roleDTO) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Role not found with given id"));
 
@@ -60,13 +60,13 @@ public class RoleServiceImpl implements RoleService {
         role.setPermissionSet(permissionMapper(roleDTO.permissions()));
 
         roleRepository.save(role);
-        return ApiResult
+        return ApiResponse
                 .successResponse("Role successfully updated");
     }
 
     @Override
-    public ApiResult<Map<String, Integer>> getAllPermissions() {
-        return ApiResult
+    public ApiResponse<Map<String, Integer>> getAllPermissions() {
+        return ApiResponse
                 .successResponse(
                         Arrays.stream(Permission.values())
                                 .collect(Collectors.toMap(Enum::name, Enum::ordinal)));

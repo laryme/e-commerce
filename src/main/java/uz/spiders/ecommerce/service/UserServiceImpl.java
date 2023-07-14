@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.spiders.ecommerce.entity.Role;
 import uz.spiders.ecommerce.entity.User;
 import uz.spiders.ecommerce.exception.DataNotFoundException;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.UserDTO;
 import uz.spiders.ecommerce.repository.RoleRepository;
 import uz.spiders.ecommerce.repository.UserRepository;
@@ -30,31 +30,31 @@ public class UserServiceImpl implements UserService {
     @Value("${aws.s3.endpointUrl}")
     private String endpointUrl;
     @Override
-    public ApiResult<Page<User>> getAllUsers(PageRequest pageRequest) {
-        return ApiResult
+    public ApiResponse<Page<User>> getAllUsers(PageRequest pageRequest) {
+        return ApiResponse
                 .successResponse(userRepository.findAll(pageRequest));
     }
 
     @Override
-    public ApiResult<?> getUserById(Integer id) {
-        return ApiResult
+    public ApiResponse<?> getUserById(Integer id) {
+        return ApiResponse
                 .successResponse(
                         userRepository.findById(id)
                                 .orElseThrow(() -> new DataNotFoundException("User not found with given id")));
     }
 
     @Override
-    public ApiResult<?> editUser(Integer id, UserDTO userDTO) {
+    public ApiResponse<?> editUser(Integer id, UserDTO userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
         userRepository.save(userMapper(user, userDTO));
-        return ApiResult
+        return ApiResponse
                 .successResponse("User successfully updated");
     }
 
     @Override
-    public ApiResult<?> changeDeletedFieldStatus(Integer id) {
+    public ApiResponse<?> changeDeletedFieldStatus(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -64,24 +64,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         if(nonDeleted){
-            return ApiResult
+            return ApiResponse
                     .successResponse("User successfully deleted");
         }
 
-        return ApiResult
+        return ApiResponse
                 .successResponse("User successfully restored");
     }
 
     //for delete
     @Override
-    public ApiResult<?> deleteUserById(Integer id) {
+    public ApiResponse<?> deleteUserById(Integer id) {
         userRepository.deleteById(id);
-        return ApiResult
+        return ApiResponse
                 .successResponse("User successfully deleted");
     }
 
     @Override
-    public ApiResult<?> changeBlockStatus(Integer id) {
+    public ApiResponse<?> changeBlockStatus(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -91,15 +91,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         if(flag){
-            return ApiResult
+            return ApiResponse
                     .successResponse("User successfully blocked");
         }
-        return ApiResult
+        return ApiResponse
                 .successResponse("User successfully unblocked");
     }
 
     @Override
-    public ApiResult<?> promoteUserToNewRole(Integer id, Integer roleId) {
+    public ApiResponse<?> promoteUserToNewRole(Integer id, Integer roleId) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new DataNotFoundException("Role not found with given id"));
 
@@ -110,12 +110,12 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return ApiResult
+        return ApiResponse
                 .successResponse("User successfully promoted");
     }
 
     @Override
-    public ApiResult<?> changeUserAvatar(Integer id, MultipartFile file) {
+    public ApiResponse<?> changeUserAvatar(Integer id, MultipartFile file) {
         /*User user = userRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("User not found with given id"));
 
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
         user.setAvatarUrl(photoUrl);
 
         userRepository.save(user);*/
-        return ApiResult
+        return ApiResponse
                 .successResponse("User profile photo successfully changed");
     }
 

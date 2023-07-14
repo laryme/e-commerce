@@ -17,7 +17,7 @@ import uz.spiders.ecommerce.entity.ProductPicture;
 import uz.spiders.ecommerce.exception.DataNotFoundException;
 import uz.spiders.ecommerce.exception.InvalidParameterException;
 import uz.spiders.ecommerce.mapper.ProductMapper;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.ProductDTO;
 import uz.spiders.ecommerce.payload.ProductResponse;
 import uz.spiders.ecommerce.repository.BrandRepository;
@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ApiResult<?> createNewProduct(ProductDTO productDTO, List<MultipartFile> files) {
+    public ApiResponse<?> createNewProduct(ProductDTO productDTO, List<MultipartFile> files) {
         Optional<Brand> brand = brandRepository.findById(productDTO.brandID());
         Optional<Category> category = categoryRepository.findById(productDTO.categoryID());
         if (brand.isEmpty())
@@ -54,22 +54,22 @@ public class ProductServiceImpl implements ProductService {
             throw new DataNotFoundException("category not found with given id");
 
         productRepository.save(toProduct(productDTO, files, brand.get(), category.get()));
-        return ApiResult.successResponse();
+        return ApiResponse.successResponse();
     }
 
     @Override
-    public ApiResult<ProductResponse> getProductById(Integer id) {
+    public ApiResponse<ProductResponse> getProductById(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("product not found with given id"));
 
 
         ProductResponse productResponse = productMapper.fromProduct(product);
-        return ApiResult
+        return ApiResponse
                 .successResponse(productResponse);
     }
 
     @Override
-    public ApiResult<?> getAllProduct(Integer page, int size, String[] sort) {
+    public ApiResponse<?> getAllProduct(Integer page, int size, String[] sort) {
         if (sort.length != 2)
             throw new InvalidParameterException("please enter valid parameter");
         try {
@@ -82,29 +82,29 @@ public class ProductServiceImpl implements ProductService {
 
             Page<Product> products = productRepository.findAllByIsActiveTrue(pageRequest);
 
-            return ApiResult.successResponse(products.map(productMapper::fromProduct));
+            return ApiResponse.successResponse(products.map(productMapper::fromProduct));
         } catch (PropertyReferenceException e) {
             throw new InvalidParameterException(String.format("Invalid parameter name:{%s} specified for pagination", sort[0]));
         }
     }
 
     @Override
-    public ApiResult<?> deleteProduct(Integer id) {
+    public ApiResponse<?> deleteProduct(Integer id) {
         int affectedRows = productRepository.deleteProductById(id);
         if (affectedRows < 0)
             throw new DataNotFoundException("product not found with given parameter");
 
-        return ApiResult.successResponse("product successfully deleted");
+        return ApiResponse.successResponse("product successfully deleted");
     }
 
     @Override
-    public ApiResult<?> changeProductStatus(Integer id) {
+    public ApiResponse<?> changeProductStatus(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Product not found with given id"));
 
         product.setActive(!product.isActive());
         productRepository.save(product);
-        return ApiResult
+        return ApiResponse
                 .successResponse("Product status successfully changed");
     }
 

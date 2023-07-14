@@ -14,7 +14,7 @@ import uz.spiders.ecommerce.exception.EmailNotVerifiedException;
 import uz.spiders.ecommerce.exception.EmailSendingException;
 import uz.spiders.ecommerce.exception.TokenExpiredOrInvalid;
 import uz.spiders.ecommerce.exception.UsernameOrEmailAlreadyExists;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.AuthDTO;
 import uz.spiders.ecommerce.payload.RegisterDTO;
 import uz.spiders.ecommerce.payload.TokenDTO;
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailSenderService emailSenderService;
 
     @Override
-    public ApiResult<?> register(RegisterDTO registerDTO) {
+    public ApiResponse<?> register(RegisterDTO registerDTO) {
         /*if (userRepository.existsByUsername(registerDTO.username()))
             throw new UsernameOrEmailAlreadyExists("Username is already registered");*/
         if (userRepository.existsByEmail(registerDTO.email()))
@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
             }
         });
 
-        return ApiResult
+        return ApiResponse
                 .successResponse(
                         TokenDTO.builder()
                                 .accessToken(jwtService.generateAccessToken(regUser))
@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ApiResult<?> authenticate(AuthDTO authDTO) {
+    public ApiResponse<?> authenticate(AuthDTO authDTO) {
 
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
             });
         }
 
-        return ApiResult
+        return ApiResponse
                 .successResponse(
                         new TokenDTO(
                                 jwtService.generateAccessToken(principalUser),
@@ -101,7 +101,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ApiResult<?> verification(String email, String token) {
+    public ApiResponse<?> verification(String email, String token) {
         try {
             if (jwtService.isVerificationTokenValid(email, token)) {
                 User user = userRepository.findByEmail(email).orElseThrow(
@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
         }catch (Exception e){
             throw new TokenExpiredOrInvalid("expired token");
         }
-        return ApiResult
+        return ApiResponse
                 .successResponse("Email successfully verified");
     }
 }

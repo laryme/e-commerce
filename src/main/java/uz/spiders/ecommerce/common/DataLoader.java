@@ -50,7 +50,7 @@ public class DataLoader implements CommandLineRunner {
 
             userRepository.save(superUser);
 
-            brandRepository.save(new Brand("BRAND-1"));
+            brandRepository.save(new Brand("BRAND-1", "/home/lary/resources/ecommerce/images/brand/logo-ee013b49-45fe-43e1-8b97-d5837594e2f9"));
             categoryRepository.save(new Category("CATEGORY-1", null));
 
             detailCategoryRepository.save(new DetailCategory("DETAIL-CATEGORY-1"));

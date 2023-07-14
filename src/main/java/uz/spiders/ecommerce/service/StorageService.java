@@ -13,22 +13,33 @@ import java.util.UUID;
 
 @Service
 public class StorageService {
-    @Value("${app.product.images.path}")
+    @Value("${app.images.product.path}")
     private String productPicturePath;
+
+    @Value("${app.images.brand.path}")
+    private String brandLogoPath;
 
     public Path saveProductPicture(String fileName, MultipartFile multipartFile){
         return saveMultipartFile(productPicturePath, fileName, multipartFile);
     }
 
     public Path saveProductPicture(MultipartFile multipartFile){
-        return saveMultipartFile(productPicturePath, getProductPictureName(), multipartFile);
+        return saveMultipartFile(productPicturePath, getFileName("product-"), multipartFile);
+    }
+
+    public Path saveBrandLogo(MultipartFile multipartFile){
+        return saveMultipartFile(brandLogoPath, getFileName("logo-"), multipartFile);
     }
 
     public byte[] getProductPicture(String path) throws IOException {
-        return getFile(path);
+        return getFileBytes(path);
     }
 
-    private byte[] getFile(String path) throws IOException {
+    public byte[] getFile(String path) throws IOException {
+        return getFileBytes(path);
+    }
+
+    private byte[] getFileBytes(String path) throws IOException {
         return Files.readAllBytes(Path.of(path));
     }
 
@@ -61,7 +72,15 @@ public class StorageService {
         return "file-" + UUID.randomUUID();
     }
 
-    private String getProductPictureName() {
-        return "product-" + UUID.randomUUID();
+    private String getFileName(String preFix) {
+        return preFix + UUID.randomUUID();
+    }
+
+    public void replaceExcitingFile(String path, MultipartFile multipartFile) {
+        try {
+            Files.copy(multipartFile.getInputStream(), Path.of(path), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

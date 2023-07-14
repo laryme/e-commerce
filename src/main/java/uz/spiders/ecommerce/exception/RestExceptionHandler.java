@@ -2,6 +2,7 @@ package uz.spiders.ecommerce.exception;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
+import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import uz.spiders.ecommerce.payload.ApiResult;
+import uz.spiders.ecommerce.payload.ApiResponse;
 import uz.spiders.ecommerce.payload.ErrorData;
 
 import java.util.List;
@@ -20,27 +21,27 @@ import java.util.List;
 @ControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler(value = UsernameOrEmailAlreadyExists.class)
-    public ResponseEntity<ApiResult<List<ErrorData>>> exceptionHandler(UsernameOrEmailAlreadyExists ex) {
+    public ResponseEntity<ApiResponse<List<ErrorData>>> exceptionHandler(UsernameOrEmailAlreadyExists ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(ex.getMessage(), HttpStatus.CONFLICT.value()),
                 HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResult<List<ErrorData>>> exceptionHandler(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiResponse<List<ErrorData>>> exceptionHandler(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
         return ResponseEntity.status(400)
                 .body(
-                        new ApiResult<>(
+                        new ApiResponse<>(
                                 fieldErrors
                                         .stream()
                                         .map(r -> new ErrorData(r.getDefaultMessage(), r.getField()))
                                         .toList()));
        /* return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 ex.getBindingResult().getFieldErrors()
                                         .stream()
@@ -50,9 +51,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(BadCredentialsException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(BadCredentialsException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 "Username or password incorrect",
                                 HttpStatus.UNAUTHORIZED.value()),
@@ -60,9 +61,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(LockedException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(LockedException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(LockedException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 "Account is blocked due to some causes",
                                 HttpStatus.UNAUTHORIZED.value()),
@@ -70,9 +71,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(DisabledException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(DisabledException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 "Account has not been activated yet. Please activate your account",
                                 HttpStatus.UNAUTHORIZED.value()),
@@ -80,9 +81,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(TokenExpiredOrInvalid.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(TokenExpiredOrInvalid ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(TokenExpiredOrInvalid ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 "The link you have clicked on is no longer valid. Please request a new link from the sender.",
                                 HttpStatus.BAD_REQUEST.value()),
@@ -90,9 +91,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(EmailNotVerifiedException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(EmailNotVerifiedException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(EmailNotVerifiedException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 "Your email address has not been verified. In order to access our system, you need to verify your email address first. We have sent a verification link to the email address you provided during registration. Please check your email and follow the instructions in the email to verify your account. If you do not see the email in your inbox, please check your spam or junk folder.",
                                 HttpStatus.CONFLICT.value()),
@@ -101,9 +102,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(EmailSendingException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(EmailSendingException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(EmailSendingException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 ex.getMessage(),
                                 HttpStatus.CONFLICT.value()),
@@ -112,9 +113,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(DataNotFoundException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(DataNotFoundException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 ex.getMessage(),
                                 HttpStatus.NOT_FOUND.value()),
@@ -123,9 +124,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(InvalidParameterException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(InvalidParameterException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(InvalidParameterException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 ex.getMessage(),
                                 HttpStatus.BAD_REQUEST.value()),
@@ -134,13 +135,18 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ApiResult<?>> exceptionHandler(ExpiredJwtException ex) {
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(ExpiredJwtException ex) {
         return new ResponseEntity<>(
-                ApiResult
+                ApiResponse
                         .failResponse(
                                 ex.getMessage(),
                                 HttpStatus.BAD_REQUEST.value()),
                 HttpStatus.NOT_FOUND);
 
+    }
+
+    @ExceptionHandler(InvalidContentTypeException.class)
+    public ResponseEntity<?> handleInvalidContentTypeException(InvalidContentTypeException e) {
+        return ResponseEntity.badRequest().build();
     }
 }

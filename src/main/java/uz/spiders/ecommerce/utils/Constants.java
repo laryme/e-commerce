@@ -8,6 +8,9 @@ public interface Constants {
     String[] OPEN_PAGES = {
             AuthController.BASE_PATH + "/**",
             ProductController.BASE_PATH+"/image/**",
+            "/swagger-ui/**",
+            "/api/**",
+            "/v3/api-docs",
             "/*"
     };
     String AUTH_HEADER = "Authorization";
